@@ -37,14 +37,14 @@ export const actions = {
         VueCookies.set('accessToken', data.accessToken)
         commit('SET_CURRENT_USER', data.name)
         Message({
-          message: `${data.name}로그인 되었습니다.`,
+          message: `${data.name}님이 로그인 되었습니다.`,
           type: 'success',
         })
         router.push({ name: 'board' })
       })
       .catch((err) => {
         Message({
-          message: err.response.data.message,
+          message: err.response.data.errors.message,
           type: 'error',
         })
       })
