@@ -1,30 +1,69 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import layout from '@/views/layout.vue'
+import { hasToken } from '@/utils/token'
+// import store from '@/store'
+import { Message } from 'element-ui'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
+    path: '/',
+    name: 'layout',
+    component: layout,
+    redirect: { name: 'login' },
+    children: [
+      {
+        path: '/signUp',
+        name: 'signUp',
+        component: () =>
+          import(/* webpackChunkName: "about" */ '@/components/signUp.vue'),
+      },
+      {
+        path: '/login',
+        name: 'login',
+        component: () =>
+          import(/* webpackChunkName: "about" */ '@/components/login.vue'),
+      },
+      {
+        path: '/board',
+        name: 'board',
+        component: () =>
+          import(/* webpackChunkName: "about" */ '@/components/board.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/write',
+        name: 'write',
+        component: () =>
+          import(/* webpackChunkName: "about" */ '@/components/writeBoard.vue'),
+        meta: { requiresAuth: true },
+      },
+    ],
   },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
-  },
-];
+]
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
   routes,
-});
-
-export default router;
+})
+// eslint-disable-next-line
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    // 이 라우트는 인증이 필요하며 로그인 한 경우 확인하십시오.
+    // 그렇지 않은 경우 로그인 페이지로 리디렉션하십시오.
+    if (!hasToken()) {
+      Message({
+        type: 'info',
+        message: '로그인이 필요합니다.',
+      })
+      return next({ name: 'login' })
+    }
+    next()
+  } else {
+    next() // 반드시 next()를 호출하십시오!
+  }
+})
+export default router
