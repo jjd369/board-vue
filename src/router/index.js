@@ -27,7 +27,14 @@ const routes = [
           import(/* webpackChunkName: "about" */ '@/components/login.vue'),
       },
       {
-        path: '/board',
+        path: '/boardList',
+        name: 'boardList',
+        component: () =>
+          import(/* webpackChunkName: "about" */ '@/components/boardList.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/board/:id',
         name: 'board',
         component: () =>
           import(/* webpackChunkName: "about" */ '@/components/board.vue'),
