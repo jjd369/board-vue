@@ -30,7 +30,8 @@ export const actions = {
   getCurrentUser({ commit }, user) {
     commit('SET_CURRENT_USER', user)
   },
-  login({ commit }, userInfo) {
+  login({ commit, dispatch }, userInfo) {
+    dispatch('common/getLoading', true, { root: true })
     signIn(userInfo)
       .then(({ data }) => {
         VueCookies.set('refreshToken', data.refreshToken)
@@ -40,13 +41,16 @@ export const actions = {
           message: `${data.name}님이 로그인 되었습니다.`,
           type: 'success',
         })
-        router.push({ name: 'board' })
+        router.push({ name: 'boardList' })
       })
       .catch((err) => {
         Message({
           message: err.response.data.errors.message,
           type: 'error',
         })
+      })
+      .finally(() => {
+        dispatch('common/getLoading', false, { root: true })
       })
   },
   async logout({ commit }) {

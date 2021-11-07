@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container v-loading="loading">
     <el-header><Header></Header></el-header>
     <el-main>
       <router-view></router-view>
@@ -12,8 +12,12 @@
 <script>
 import Header from '@/components/header'
 import Alert from '@/components/alert'
+import { mapState } from 'vuex'
 export default {
   name: 'layout',
   components: { Header, Alert },
+  computed: {
+    ...mapState('common', ['loading']),
+  },
 }
 </script>

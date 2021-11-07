@@ -53,10 +53,11 @@ export default {
   methods: {
     async writeBoard() {
       await insertBoard({
+        name: this.current_user,
         title: this.title,
         content: this.content,
       })
-      this.$router.push({ name: 'board' })
+      this.$router.push({ name: 'boardList' })
     },
 
     submitUpload() {

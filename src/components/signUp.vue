@@ -67,14 +67,15 @@ export default {
   },
   methods: {
     signUp() {
+      this.$store.dispatch('common/getLoading', true)
       signUp({
         name: this.name,
         email: this.email,
         password: this.password,
       })
-        .then(() => {
+        .then(({ data }) => {
           this.$message({
-            message: `${name}님 회원가입이 완료되었습니다.`,
+            message: `${data.name}님 회원가입이 완료되었습니다.`,
             type: 'success',
           })
           this.result = true
@@ -84,6 +85,9 @@ export default {
             message: err.response.data.errors.message,
             type: 'error',
           })
+        })
+        .finally(() => {
+          this.$store.dispatch('common/getLoading', false)
         })
     },
   },
