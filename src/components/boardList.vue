@@ -60,7 +60,7 @@ export default {
       })
     },
     handleSelectionChange(val) {
-      this.$router.push({ name: 'board', query: { id: val._id } })
+      this.$router.push({ name: 'board', params: { id: val._id } })
     },
   },
   mounted() {

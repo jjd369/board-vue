@@ -24,7 +24,7 @@ export const actions = {
     if (hasToken()) {
       const { data } = await fetchMe()
       await commit('SET_CURRENT_USER', data.name)
-      router.push({ name: 'board' }).catch(() => {})
+      // router.push({ name: 'boardList' }).catch(() => {})
     }
   },
   getCurrentUser({ commit }, user) {

@@ -16,12 +16,12 @@ import { getBoard } from '@/apis/board'
 export default {
   data() {
     return {
-      board: null,
+      board: {},
     }
   },
   methods: {
     async fecthBoard() {
-      const { data } = await getBoard(this.$route.query.id)
+      const { data } = await getBoard(this.$route.params.id)
       this.board = data
     },
   },

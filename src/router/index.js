@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import layout from '@/views/layout.vue'
 import { hasToken } from '@/utils/token'
-// import store from '@/store'
 import { Message } from 'element-ui'
 
 Vue.use(VueRouter)
