@@ -15,7 +15,10 @@
   align-items: center;
 }
 .el-card{
-  // width: 600px;
+  min-width: 600px;
+}
+.el-popper {
+  min-width: 70px;
 }
 @include mobile {
 }

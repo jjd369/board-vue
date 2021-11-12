@@ -54,9 +54,9 @@ export const actions = {
       })
   },
   async logout({ commit }) {
-    await signOut({ refreshToken: getRefreshToken() })
     VueCookies.remove('refreshToken')
     VueCookies.remove('accessToken')
+    await signOut({ refreshToken: getRefreshToken() })
     commit('SET_CURRENT_USER', null)
   },
 }

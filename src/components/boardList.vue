@@ -4,12 +4,15 @@
       <h1>게시물물</h1>
       <div class="listWrap">
         <el-table
+          ref="multipleTable"
           :data="lists"
           style="width: 100%"
           height="250"
           @current-change="handleSelectionChange"
+          @select="hadelSelectionCheck"
         >
-          <el-table-column prop="user" label="user"> </el-table-column>
+          <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
+          <el-table-column prop="author.name" label="name"> </el-table-column>
           <el-table-column prop="title" label="title"> </el-table-column>
           <el-table-column prop="file" label="file"> </el-table-column>
         </el-table>
@@ -42,6 +45,7 @@ export default {
       content: '',
       title: '',
       lists: [],
+      multipleSelection: [],
     }
   },
   computed: {
@@ -61,6 +65,10 @@ export default {
     },
     handleSelectionChange(val) {
       this.$router.push({ name: 'board', params: { id: val._id } })
+    },
+    hadelSelectionCheck(val) {
+      console.log(val)
+      this.multipleSelection = val
     },
   },
   mounted() {
