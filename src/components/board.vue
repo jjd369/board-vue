@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-card
-      ><div v-if="!board_modify">
+      ><template v-if="!board_modify">
         <div class="btnWrap">
           <el-button @click="$router.push({ name: 'boardList' })">
             목록
@@ -14,245 +14,14 @@
           ><p>{{ board.content }}</p></div
         >
         <div class="btnWrap">
-          <el-button @click="modify = true"> 수정 </el-button>
+          <el-button @click="board_modify = true"> 수정 </el-button>
           <el-button @click="deleteBoard()"> 삭제 </el-button>
         </div>
         <div class="line"></div>
-        <div class="commentsWrap">
-          <!-- 댓글 입력 박스 -->
-          <div class="commentWrite">
-            <el-input
-              maxlength="55"
-              placeholder="댓글을 입력해주세요."
-              v-model="comment_to_board_string"
-            >
-              <template slot="prepend">{{ current_user }}</template>
-              <el-button
-                slot="append"
-                icon="el-icon-chat-line-round"
-                @click="writeCommentToBoard"
-              ></el-button>
-            </el-input>
-          </div>
-          <!-- 댓글 리스트 -->
-          <div class="commentList">
-            <div class="row" v-for="(comment, index) in comments" :key="index">
-              <!-- 댓글 작성자 아이디 -->
-              <div class="col">
-                <span class="author">{{ comment.name }}</span>
-              </div>
-              <!-- 댓글 내용 -->
-              <div class="col">
-                <div class="box">
-                  <!-- 댓글 -->
-                  <template v-if="!comment.modify">
-                    <span class="content">{{ comment.content }}</span>
-                    <span class="time">{{ diffTime(comment.createdAt) }}</span>
-                    <span class="more">
-                      <el-popover
-                        placement="bottom"
-                        :width="comment.name === current_user ? 150 : 70"
-                        trigger="click"
-                        visible-arrow="true"
-                      >
-                        <div
-                          v-if="comment.name === current_user"
-                          style="text-align: right; margin: 0"
-                        >
-                          <el-button
-                            @click="
-                              handleUpdateComment(index, true, comment.content)
-                            "
-                            >수정</el-button
-                          >
-                          <el-button @click="deleteComment(comment._id)"
-                            >삭제</el-button
-                          >
-                        </div>
-                        <div v-else style="text-align: right; margin: 0">
-                          <el-button>신고</el-button>
-                        </div>
-                        <el-button
-                          slot="reference"
-                          type="text"
-                          icon="el-icon-more"
-                        ></el-button>
-                      </el-popover>
-                    </span>
-                  </template>
-                  <!-- 댓글 수정  -->
-                  <template v-else>
-                    <span class="content"
-                      ><el-input
-                        maxlength="55"
-                        v-model="comment_modify_string"
-                      ></el-input
-                    ></span>
-                    <span>
-                      <el-button
-                        :disabled="!comment.content.length ? true : false"
-                        @click="updateComment(comment._id)"
-                        >수정</el-button
-                      ></span
-                    >
-                    <span>
-                      <el-button @click="handleUpdateComment(index, false)"
-                        >취소</el-button
-                      ></span
-                    >
-                  </template>
-                </div>
-                <!-- 좋아요 및 대댓글  -->
-                <div class="box">
-                  <el-button size="mini" type="text" class="like"
-                    >좋아요</el-button
-                  >
-                  <el-button size="mini" type="text" class="unLike"
-                    >싫어요</el-button
-                  >
-                  <el-button
-                    size="mini"
-                    class="reply"
-                    type="text"
-                    @click="handleReply(index, true)"
-                    >답글</el-button
-                  >
-                </div>
-                <!-- 대댓글 입력 창 -->
-                <div class="box" v-if="comment.reply">
-                  <el-input
-                    maxlength="55"
-                    placeholder="댓글을 입력해주세요."
-                    v-model="comment_to_comment_string"
-                  >
-                    <template slot="prepend">{{ current_user }}</template>
-                    <el-button
-                      slot="append"
-                      icon="el-icon-chat-line-round"
-                      @click="writeCommentToComment(comment._id)"
-                    ></el-button>
-                  </el-input>
-                  <el-button @click="handleReply(index, false)">
-                    취소
-                  </el-button>
-                </div>
-                <div class="box" v-if="comment.comments.length">
-                  <el-button
-                    size="mini"
-                    type="text"
-                    class="moreReply"
-                    icon="el-icon-caret-bottom"
-                    @click="replay_visible = !replay_visible"
-                    >댓글 보기</el-button
-                  >
-                </div>
-                <div class="box">
-                  <template v-if="replay_visible">
-                    <div class="commentList">
-                      <div
-                        class="row"
-                        v-for="(reply, index) in comment.comments"
-                        :key="index"
-                      >
-                        <!-- 댓글 작성자 아이디 -->
-                        <div class="col">
-                          <span class="author">{{ reply.name }}</span>
-                        </div>
-                        <!-- 댓글 내용 -->
-                        <div class="col">
-                          <div class="box">
-                            <!-- 댓글 -->
-                            <template v-if="!reply.modify">
-                              <span class="content">{{ reply.content }}</span>
-                              <span class="time">{{
-                                diffTime(reply.createdAt)
-                              }}</span>
-                              <span class="more">
-                                <el-popover
-                                  placement="bottom"
-                                  :width="
-                                    reply.name === current_user ? 150 : 70
-                                  "
-                                  trigger="click"
-                                  visible-arrow="true"
-                                >
-                                  <div
-                                    v-if="reply.name === current_user"
-                                    style="text-align: right; margin: 0"
-                                  >
-                                    <el-button
-                                      @click="
-                                        handleUpdateComment(
-                                          index,
-                                          true,
-                                          reply.content
-                                        )
-                                      "
-                                      >수정</el-button
-                                    >
-                                    <el-button @click="deleteComment(reply._id)"
-                                      >삭제</el-button
-                                    >
-                                  </div>
-                                  <div
-                                    v-else
-                                    style="text-align: right; margin: 0"
-                                  >
-                                    <el-button>신고</el-button>
-                                  </div>
-                                  <el-button
-                                    slot="reference"
-                                    type="text"
-                                    icon="el-icon-more"
-                                  ></el-button>
-                                </el-popover>
-                              </span>
-                            </template>
-                            <!-- 댓글 수정  -->
-                            <template v-else>
-                              <span class="content"
-                                ><el-input
-                                  maxlength="55"
-                                  v-model="comment_modify_string"
-                                ></el-input
-                              ></span>
-                              <span>
-                                <el-button
-                                  :disabled="
-                                    !reply.content.length ? true : false
-                                  "
-                                  @click="updateComment(reply._id)"
-                                  >수정</el-button
-                                ></span
-                              >
-                              <span>
-                                <el-button
-                                  @click="handleUpdateComment(index, false)"
-                                  >취소</el-button
-                                ></span
-                              >
-                            </template>
-                          </div>
-                          <!-- 좋아요 및 대댓글  -->
-                          <div class="box">
-                            <el-button size="mini" type="text" class="like"
-                              >좋아요</el-button
-                            >
-                            <el-button size="mini" type="text" class="unLike"
-                              >싫어요</el-button
-                            >
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-else>
+        <Comment :comments="comments" @callFecthBoard="fecthBoard"></Comment>
+      </template>
+      <!-- 보드 수정 -->
+      <template v-else>
         <div class="inputWrap">
           <p>제목</p>
           <el-input placeholder="title" v-model="board.title" clearable>
@@ -266,7 +35,7 @@
         <div class="btnWrap">
           <el-button @click="updateBoard()">저장</el-button>
         </div>
-      </div>
+      </template>
     </el-card>
   </div>
 </template>
@@ -281,15 +50,13 @@ import {
 } from '@/apis/comment'
 import { mapState } from 'vuex'
 import map from 'lodash/map'
-
+import Comment from '@/components/comment'
 export default {
+  components: { Comment },
   data() {
     return {
       board: {},
       comments: [],
-      comment_to_board_string: '',
-      comment_to_comment_string: '',
-      comment_modify_string: '',
       board_modify: false,
       visible: false,
       replay_visible: false,
@@ -306,7 +73,15 @@ export default {
 
       // 객체에 modify, reply 값 추가
       this.comments = map(this.board.comments, (el) => {
-        return { ...el, modify: false, reply: false }
+        return {
+          ...el,
+          modify: false,
+          reply: false,
+          visible: false,
+          comments: map(el.comments, (reply) => {
+            return { ...reply, modify: false }
+          }),
+        }
       })
 
       this.$store.dispatch('common/getLoading', false)
