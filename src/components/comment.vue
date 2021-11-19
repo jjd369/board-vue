@@ -7,7 +7,7 @@
         placeholder="댓글을 입력해주세요."
         v-model="comment_to_board_string"
       >
-        <template slot="prepend">{{ current_user }}</template>
+        <template slot="prepend">{{ current_user.name }}</template>
         <el-button
           slot="append"
           icon="el-icon-chat-line-round"
@@ -24,7 +24,7 @@
       >
         <!-- 댓글 작성자 아이디 -->
         <div class="col">
-          <span class="author">{{ comment.name }}</span>
+          <span class="author">{{ comment.uploadedBy.name }}</span>
         </div>
         <!-- 댓글 내용 -->
         <div class="col">
@@ -36,12 +36,14 @@
               <span class="more">
                 <el-popover
                   placement="bottom"
-                  :width="comment.name === current_user ? 150 : 70"
+                  :width="
+                    comment.uploadedBy.email === current_user.email ? 150 : 70
+                  "
                   trigger="click"
                   visible-arrow="true"
                 >
                   <div
-                    v-if="comment.name === current_user"
+                    v-if="comment.uploadedBy.email === current_user.email"
                     style="text-align: right; margin: 0"
                   >
                     <el-button
@@ -106,7 +108,7 @@
               placeholder="댓글을 입력해주세요."
               v-model="comment_to_comment_string"
             >
-              <template slot="prepend">{{ current_user }}</template>
+              <template slot="prepend">{{ current_user.name }}</template>
               <el-button
                 slot="append"
                 icon="el-icon-chat-line-round"
@@ -140,7 +142,9 @@
                   >
                     <!-- 대댓글 작성자 아이디 -->
                     <div class="col">
-                      <span class="author">{{ nested_comment.name }}</span>
+                      <span class="author">{{
+                        nested_comment.uploadedBy.name
+                      }}</span>
                     </div>
                     <!-- 대댓글 내용 -->
                     <div class="col">
@@ -157,13 +161,19 @@
                             <el-popover
                               placement="bottom"
                               :width="
-                                nested_comment.name === current_user ? 150 : 70
+                                nested_comment.uploadedBy.email ===
+                                current_user.email
+                                  ? 150
+                                  : 70
                               "
                               trigger="click"
                               visible-arrow="true"
                             >
                               <div
-                                v-if="nested_comment.name === current_user"
+                                v-if="
+                                  nested_comment.uploadedBy.email ===
+                                  current_user.email
+                                "
                                 style="text-align: right; margin: 0"
                               >
                                 <el-button
@@ -333,13 +343,18 @@ export default {
 
       const diff = now - time
 
-      var msec = diff
-      var hh = Math.floor(msec / 1000 / 60 / 60)
+      let msec = diff
+      let dd = Math.floor(msec / 1000 / 24 / 60 / 60)
+      msec -= dd * 1000 * 24 * 60 * 60
+      let hh = Math.floor(msec / 1000 / 60 / 60)
       msec -= hh * 1000 * 60 * 60
-      var mm = Math.floor(msec / 1000 / 60)
+      let mm = Math.floor(msec / 1000 / 60)
       msec -= mm * 1000 * 60
-      var ss = Math.floor(msec / 1000)
+      let ss = Math.floor(msec / 1000)
       msec -= ss * 1000
+      if (dd) {
+        return `${dd}일 전`
+      }
       if (hh) {
         return `${hh}시간 전`
       }
@@ -361,11 +376,66 @@ export default {
 </script>
 
 <style lang="scss">
+.commentList {
+  margin-top: 15px;
+  .commentList {
+    width: 90%;
+  }
+  .row {
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    .col {
+      &:nth-child(1) {
+        align-items: flex-start;
+      }
+      &:nth-child(2) {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 85%;
+      }
+      display: flex;
+      align-items: center;
+      .box {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+        line-height: 30px;
+      }
+    }
+    .author {
+      min-width: 80px;
+    }
+    .content {
+      min-width: 150px;
+      text-align: left;
+      width: 70%;
+      word-break: keep-all;
+      word-wrap: break-word;
+    }
+    .time {
+      min-width: 50px;
+      font-size: 13px;
+    }
+    .more {
+      min-width: 50px;
+    }
+    .like,
+    .unLike,
+    .reply {
+      min-width: 70px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+  }
+}
+
 .slide-fade-enter-active {
   transition: all 0.3s ease;
 }
 .slide-fade-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0s ease;
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active below version 2.1.8 */ {

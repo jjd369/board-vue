@@ -1,53 +1,55 @@
 <template>
   <div>
-    <el-card
-      ><template v-if="!board_modify">
-        <div class="btnWrap">
-          <el-button @click="$router.push({ name: 'boardList' })">
-            목록
-          </el-button>
-        </div>
-        <div class="titleWrap"
-          ><h2>{{ board.title }}</h2></div
-        >
-        <div class="contentWrap"
-          ><p>{{ board.content }}</p></div
-        >
-        <div class="btnWrap">
-          <el-button @click="board_modify = true"> 수정 </el-button>
-          <el-button @click="deleteBoard()"> 삭제 </el-button>
-        </div>
-        <div class="line"></div>
-        <Comment :comments="comments" @callFecthBoard="fecthBoard"></Comment>
-      </template>
-      <!-- 보드 수정 -->
-      <template v-else>
-        <div class="inputWrap">
-          <p>제목</p>
-          <el-input placeholder="title" v-model="board.title" clearable>
-          </el-input>
-        </div>
-        <div class="inputWrap">
-          <p>내용</p>
-          <el-input placeholder="content" v-model="board.content" clearable>
-          </el-input>
-        </div>
-        <div class="btnWrap">
-          <el-button @click="updateBoard()">저장</el-button>
-        </div>
-      </template>
-    </el-card>
+    <template v-if="!board_modify">
+      <div class="btnWrap">
+        <el-button @click="$router.push({ name: 'boardList' })">
+          목록
+        </el-button>
+      </div>
+      <div class="titleWrap"
+        ><h2>{{ board.title }}</h2></div
+      >
+      <div class="contentWrap"
+        ><p>{{ board.content }}</p></div
+      >
+      <div v-if="!!board.attachment"
+        ><el-button
+          type="text"
+          size="mini"
+          icon="el-icon-folder"
+          @click="fileDownload()"
+          >{{ board.attachment.originalFileName }}</el-button
+        ></div
+      >
+      <div class="btnWrap">
+        <el-button @click="board_modify = true"> 수정 </el-button>
+        <el-button @click="deleteBoard()"> 삭제 </el-button>
+      </div>
+      <div class="line"></div>
+      <Comment :comments="comments" @callFecthBoard="fecthBoard"></Comment>
+    </template>
+    <!-- 보드 수정 -->
+    <template v-else>
+      <div class="inputWrap">
+        <p>제목</p>
+        <el-input placeholder="title" v-model="board.title" clearable>
+        </el-input>
+      </div>
+      <div class="inputWrap">
+        <p>내용</p>
+        <el-input placeholder="content" v-model="board.content" clearable>
+        </el-input>
+      </div>
+      <div class="btnWrap">
+        <el-button @click="updateBoard()">저장</el-button>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 import { getBoard, deleteBoard, updateBoard } from '@/apis/board'
-import {
-  commentToComment,
-  commentToBoard,
-  updateComment,
-  deleteComment,
-} from '@/apis/comment'
+// import { downloadFile } from '@/apis/file'
 import { mapState } from 'vuex'
 import map from 'lodash/map'
 import Comment from '@/components/comment'
@@ -55,7 +57,9 @@ export default {
   components: { Comment },
   data() {
     return {
-      board: {},
+      board: {
+        attachment: {},
+      },
       comments: [],
       board_modify: false,
       visible: false,
@@ -90,6 +94,7 @@ export default {
       await deleteBoard({ id: this.$route.params.id })
         .then(() => {
           this.$message({
+            showClose: true,
             message: '글이 삭제되었습니다.',
             tpye: 'success',
           })
@@ -97,6 +102,7 @@ export default {
         })
         .catch((err) => {
           this.$message({
+            showClose: true,
             message: err.response.data.errors.message,
             tpye: 'error',
           })
@@ -106,71 +112,10 @@ export default {
       await updateBoard(this.board)
       this.board_modify = false
     },
-    async writeCommentToBoard() {
-      await commentToBoard({
-        content: this.comment_to_board_string,
-        board: this.$route.params.id,
-      })
-      this.comment_to_board_string = ''
-      this.fecthBoard()
-    },
-    async writeCommentToComment(_id) {
-      console.log(_id)
-
-      await commentToComment({
-        content: this.comment_to_comment_string,
-        comments: _id,
-      })
-      this.comment_to_comment_string = ''
-      this.fecthBoard()
-    },
-    async deleteComment(_id) {
-      this.visible = false
-      await deleteComment({ _id })
-      this.fecthBoard()
-    },
-    async updateComment(_id) {
-      await updateComment({ _id, content: this.comment_modify_string })
-      this.fecthBoard()
-    },
-    handleUpdateComment(index, bool, content) {
-      if (content) {
-        this.comment_modify_string = content
-      } else {
-        this.comment_modify_string = ''
-      }
-      const findComment = this.comments[index]
-      findComment.modify = bool
-      this.comments.splice(index, 1, findComment)
-    },
-    handleReply(index, bool) {
-      const findComment = this.comments[index]
-      findComment.reply = bool
-      this.comments.splice(index, 1, findComment)
-    },
-    diffTime(date) {
-      const now = new Date().getTime()
-      const time = new Date(date).getTime()
-
-      const diff = now - time
-
-      var msec = diff
-      var hh = Math.floor(msec / 1000 / 60 / 60)
-      msec -= hh * 1000 * 60 * 60
-      var mm = Math.floor(msec / 1000 / 60)
-      msec -= mm * 1000 * 60
-      var ss = Math.floor(msec / 1000)
-      msec -= ss * 1000
-      if (hh) {
-        return `${hh}시간 전`
-      }
-      if (mm) {
-        return `${mm}분 전`
-      }
-      if (ss) {
-        return `${ss}초 전`
-      }
-      return `0초 전`
+    fileDownload() {
+      window.open(
+        `http://localhost:3000/api/file/${this.board.attachment.serverFileName}`
+      )
     },
   },
   mounted() {
@@ -178,53 +123,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-.commentList {
-  margin-top: 15px;
-  .row {
-    margin-bottom: 10px;
-    display: flex;
-    .col {
-      &:nth-child(1) {
-        align-items: flex-start;
-      }
-      &:nth-child(2) {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-      }
-      display: flex;
-      align-items: center;
-      .box {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        line-height: 30px;
-      }
-    }
-    .author {
-      min-width: 80px;
-    }
-    .content {
-      min-width: 150px;
-      text-align: left;
-      width: 79%;
-    }
-    .time {
-      min-width: 50px;
-      font-size: 13px;
-    }
-    .more {
-      min-width: 50px;
-    }
-    .like,
-    .unLike,
-    .reply {
-      min-width: 70px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-  }
-}
-</style>

@@ -2,8 +2,13 @@
   <el-container v-loading="loading">
     <el-header><Header></Header></el-header>
     <el-main>
-      <router-view></router-view>
-      <Alert></Alert>
+      <el-row type="flex" justify="center">
+        <el-col :sm="18" :md="15" :lg="15" :xl="12">
+          <el-card>
+            <router-view></router-view>
+          </el-card>
+        </el-col>
+      </el-row>
     </el-main>
     <el-footer>footer</el-footer>
   </el-container>
@@ -11,11 +16,10 @@
 
 <script>
 import Header from '@/components/header'
-import Alert from '@/components/alert'
 import { mapState } from 'vuex'
 export default {
   name: 'layout',
-  components: { Header, Alert },
+  components: { Header },
   computed: {
     ...mapState('common', ['loading']),
   },

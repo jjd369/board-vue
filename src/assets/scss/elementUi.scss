@@ -8,14 +8,9 @@
   background-color: #E9EEF3;
   color: #333;
   text-align: center;
-  position: relative;
-  overflow:hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .el-card{
-  min-width: 600px;
+  // min-width: 850px;
   transition: all ease 2s 0s;
 }
 .el-popper {
@@ -24,4 +19,5 @@
 @include mobile {
 }
 @include tablet {
+
 }

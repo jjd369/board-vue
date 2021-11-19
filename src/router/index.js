@@ -62,6 +62,7 @@ router.beforeEach(async (to, from, next) => {
     // 그렇지 않은 경우 로그인 페이지로 리디렉션하십시오.
     if (!hasToken()) {
       Message({
+        showClose: true,
         type: 'info',
         message: '로그인이 필요합니다.',
       })

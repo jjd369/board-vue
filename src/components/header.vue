@@ -19,7 +19,7 @@
             ><router-link :to="{ name: 'signUp' }">회원가입</router-link></span
           >
           <span v-else><a href="#" @click="logout()">로그아웃</a></span>
-          <span v-if="current_user">{{ current_user }}</span>
+          <span v-if="current_user">{{ current_user.name }}</span>
         </div></el-col
       >
     </el-row>
@@ -39,6 +39,7 @@ export default {
     async logout() {
       this.$store.dispatch('auth/logout')
       this.$message({
+        showClose: true,
         type: 'info',
         message: '로그아웃 되었습니다.',
       })

@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
-export function insertBoard(data) {
-  return request.post('/board/write', data)
+export function insertBoard(data, formData) {
+  return request.post('/board/write', data, formData)
 }
 
 export function getAllBoard() {

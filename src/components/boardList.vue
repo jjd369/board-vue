@@ -1,37 +1,32 @@
 <template>
   <div>
-    <el-card>
-      <h1>게시물물</h1>
-      <div class="listWrap">
-        <el-table
-          ref="multipleTable"
-          :data="lists"
-          style="width: 100%"
-          height="250"
-          @current-change="handleSelectionChange"
-          @select="hadelSelectionCheck"
-        >
-          <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
-          <el-table-column prop="author.name" label="name"> </el-table-column>
-          <el-table-column prop="title" label="title"> </el-table-column>
-          <el-table-column prop="file" label="file"> </el-table-column>
-        </el-table>
-        <!-- <div>
-            <span>작성자</span>
-            <span>제목</span>
-            <span>첨부파일</span>
-            <span><input type="file" name="sampleFile" /></span>
-          </div>
-          <div v-for="(list, index) in lists" :key="index">
-            <span>{{ list.user }}</span>
-            <span>{{ list.title }}</span>
-            <span>{{ list.file }}</span>
-          </div> -->
-      </div>
-      <div class="btnWrap">
-        <el-button @click="$router.push({ name: 'write' })"> 글쓰기 </el-button>
-      </div>
-    </el-card>
+    <h1>게시물물</h1>
+    <div class="listWrap">
+      <el-table
+        ref="multipleTable"
+        :data="lists"
+        style="width: 100%"
+        height="250"
+        @current-change="handleSelectionChange"
+        @select="hadelSelectionCheck"
+      >
+        <el-table-column prop="uploadedBy.name" label="name"></el-table-column>
+        <el-table-column prop="title" label="title"> </el-table-column>
+        <el-table-column label="file">
+          <template slot-scope="scope">
+            <div v-if="!!scope.row.attachment">
+              <i class="el-icon-folder"></i>
+              <span style="margin-left: 10px">{{
+                scope.row.attachment.originalFileName
+              }}</span>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div class="btnWrap">
+      <el-button @click="$router.push({ name: 'write' })"> 글쓰기 </el-button>
+    </div>
   </div>
 </template>
 
@@ -53,8 +48,11 @@ export default {
   },
   methods: {
     async fetchAllBoard() {
+      this.$store.dispatch('common/getLoading', true)
+
       const { data } = await getAllBoard()
       this.lists = data
+      this.$store.dispatch('common/getLoading', false)
     },
     async writeBoard() {
       await insertBoard({

@@ -23,12 +23,11 @@ export const actions = {
   async init({ commit }) {
     if (hasToken()) {
       const { data } = await fetchMe()
-      await commit('SET_CURRENT_USER', data.name)
-      // router.push({ name: 'boardList' }).catch(() => {})
+      await commit('SET_CURRENT_USER', data)
     }
   },
-  getCurrentUser({ commit }, user) {
-    commit('SET_CURRENT_USER', user)
+  getCurrentUser({ commit }, userInfo) {
+    commit('SET_CURRENT_USER', userInfo)
   },
   login({ commit, dispatch }, userInfo) {
     dispatch('common/getLoading', true, { root: true })
@@ -36,8 +35,12 @@ export const actions = {
       .then(({ data }) => {
         VueCookies.set('refreshToken', data.refreshToken)
         VueCookies.set('accessToken', data.accessToken)
-        commit('SET_CURRENT_USER', data.name)
+        commit('SET_CURRENT_USER', {
+          name: data.name,
+          email: userInfo.email,
+        })
         Message({
+          showClose: true,
           message: `${data.name}님이 로그인 되었습니다.`,
           type: 'success',
         })
@@ -45,6 +48,7 @@ export const actions = {
       })
       .catch((err) => {
         Message({
+          showClose: true,
           message: err.response.data.errors.message,
           type: 'error',
         })

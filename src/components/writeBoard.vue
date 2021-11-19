@@ -1,50 +1,50 @@
 <template>
   <div>
-    <el-card>
-      <form>
-        <div class="inputWrap">
-          <p>제목</p>
-          <el-input placeholder="title" v-model="title" clearable> </el-input>
-        </div>
-        <div class="inputWrap">
-          <p>내용</p>
-          <el-input placeholder="content" v-model="content" clearable>
-          </el-input>
-        </div>
-        <div class="inputWrap">
-          <p>첨부 파일</p>
-          <el-upload
-            class="upload-demo"
-            ref="upload"
-            action="#"
-            :auto-upload="false"
+    <form>
+      <div class="inputWrap">
+        <p>제목</p>
+        <el-input placeholder="title" v-model="title" clearable> </el-input>
+      </div>
+      <div class="inputWrap">
+        <p>내용</p>
+        <el-input placeholder="content" v-model="content" clearable> </el-input>
+      </div>
+      <div class="inputWrap">
+        <p>첨부 파일</p>
+        <el-upload
+          :on-change="uploadFile"
+          class="upload-demo"
+          name="attachment"
+          action="#"
+          :auto-upload="false"
+        >
+          <el-button slot="trigger" size="small" type="primary"
+            >select file</el-button
           >
-            <el-button slot="trigger" size="small" type="primary"
-              >select file</el-button
-            >
-            <div class="el-upload__tip" slot="tip"
-              >jpg/png files with a size less than 500kb</div
-            >
-          </el-upload>
-        </div>
-        <div>
-          <el-button @click="$router.push({ name: 'board' })">목록</el-button>
-          <el-button @click="writeBoard()">삽입</el-button>
-        </div>
-      </form>
-    </el-card>
+          <div class="el-upload__tip" slot="tip"
+            >jpg/png files with a size less than 500kb</div
+          >
+        </el-upload>
+      </div>
+      <div>
+        <el-button @click="$router.push({ name: 'boardList' })">목록</el-button>
+        <el-button @click="writeBoard()">삽입</el-button>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import { insertBoard } from '@/apis/board'
+// import axios from 'axios'
 export default {
   data() {
     return {
       title: '',
       content: '',
       fileList: [],
+      file: null,
     }
   },
   computed: {
@@ -52,16 +52,22 @@ export default {
   },
   methods: {
     async writeBoard() {
-      await insertBoard({
-        name: this.current_user,
-        title: this.title,
-        content: this.content,
-      })
+      const formData = new FormData()
+      // body에 넣을 formData 설정
+      if (this.file) {
+        formData.append('attachment', this.file.raw, this.file.name)
+      }
+      formData.append('name', this.current_user.name)
+      formData.append('email', this.current_user.email)
+      formData.append('title', this.title)
+      formData.append('content', this.content)
+
+      await insertBoard(formData)
+
       this.$router.push({ name: 'boardList' })
     },
-
-    submitUpload() {
-      this.$refs.upload.submit()
+    uploadFile(file) {
+      this.file = file
     },
   },
 }
