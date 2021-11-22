@@ -30,6 +30,23 @@
             show-password
           ></el-input>
         </div>
+        <div class="inputWrap">
+          <p>첨부 파일</p>
+          <el-upload
+            action="#"
+            :on-change="uploadFile"
+            class="upload-demo"
+            name="attachment"
+            :auto-upload="false"
+          >
+            <el-button slot="trigger" size="small" type="primary"
+              >select file</el-button
+            >
+            <div class="el-upload__tip" slot="tip"
+              >jpg/png files with a size less than 500kb</div
+            >
+          </el-upload>
+        </div>
         <div class="btnWarp">
           <el-button @click="signUp()">등록</el-button>
         </div>
@@ -60,17 +77,27 @@ export default {
       name: '',
       password: '',
       email: '',
+      file: null,
       result: false,
     }
   },
   methods: {
     signUp() {
       this.$store.dispatch('common/getLoading', true)
-      signUp({
-        name: this.name,
-        email: this.email,
-        password: this.password,
-      })
+      const formData = new FormData()
+      // body에 넣을 formData 설정
+      if (this.file) {
+        formData.append('attachment', this.file.raw, this.file.name)
+      }
+      formData.append('name', this.name)
+      formData.append('email', this.email)
+      formData.append('password', this.password)
+      // signUp({
+      //   name: this.name,
+      //   email: this.email,
+      //   password: this.password,
+      // })
+      signUp(formData)
         .then(({ data }) => {
           this.$message({
             showClose: true,
@@ -89,6 +116,9 @@ export default {
         .finally(() => {
           this.$store.dispatch('common/getLoading', false)
         })
+    },
+    uploadFile(file) {
+      this.file = file
     },
   },
 }

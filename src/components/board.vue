@@ -112,9 +112,9 @@ export default {
       await updateBoard(this.board)
       this.board_modify = false
     },
-    fileDownload() {
+    async fileDownload() {
       window.open(
-        `http://localhost:3000/api/file/${this.board.attachment.serverFileName}`
+        `http://localhost:3000/api/file/${this.board.attachment.serverFileName}/${this.board.attachment.originalFileName}`
       )
     },
   },

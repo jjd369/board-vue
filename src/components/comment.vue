@@ -24,10 +24,20 @@
       >
         <!-- 댓글 작성자 아이디 -->
         <div class="col">
-          <span class="author">{{ comment.uploadedBy.name }}</span>
+          <div class="imgWrap">
+            <i v-if="!comment.uploadedBy.image" class="el-icon-user"></i>
+            <img
+              v-else
+              :src="`http://localhost:3000/images/${comment.uploadedBy.image}`"
+              alt="프로필사진"
+            />
+          </div>
         </div>
         <!-- 댓글 내용 -->
         <div class="col">
+          <div class="box">
+            <span class="author">{{ comment.uploadedBy.name }}</span>
+          </div>
           <div class="box">
             <!-- 댓글 -->
             <template v-if="!comment.modify">
@@ -142,12 +152,20 @@
                   >
                     <!-- 대댓글 작성자 아이디 -->
                     <div class="col">
-                      <span class="author">{{
-                        nested_comment.uploadedBy.name
-                      }}</span>
+                      <div class="imgWrap">
+                        <img
+                          :src="`http://localhost:3000/images/${comment.uploadedBy.image}`"
+                          alt="프로필사진"
+                        />
+                      </div>
                     </div>
                     <!-- 대댓글 내용 -->
                     <div class="col">
+                      <div class="box">
+                        <span class="author">{{
+                          nested_comment.uploadedBy.name
+                        }}</span>
+                      </div>
                       <div class="box">
                         <!-- 대댓글 -->
                         <template v-if="!nested_comment.modify">
@@ -392,7 +410,7 @@ export default {
       &:nth-child(2) {
         flex-direction: column;
         align-items: flex-start;
-        width: 85%;
+        flex: 1;
       }
       display: flex;
       align-items: center;
@@ -413,6 +431,7 @@ export default {
       width: 70%;
       word-break: keep-all;
       word-wrap: break-word;
+      text-indent: 15px;
     }
     .time {
       min-width: 50px;
