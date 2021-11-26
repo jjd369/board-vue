@@ -1,8 +1,12 @@
 <template>
-  <div>
+  <div class="boradWrap">
     <template v-if="!board_modify">
-      <div class="btnWrap">
-        <el-button @click="$router.push({ name: 'boardList' })">
+      <div class="listWrap">
+        <el-button
+          @click="$router.push({ name: 'boardList' })"
+          icon="el-icon-s-fold"
+          size="mini"
+        >
           목록
         </el-button>
       </div>
@@ -12,7 +16,7 @@
       <div class="contentWrap"
         ><p>{{ board.content }}</p></div
       >
-      <div v-if="!!board.attachment"
+      <div v-if="!!board.attachment" class="attachmentWrap"
         ><el-button
           type="text"
           size="mini"
@@ -21,7 +25,7 @@
           >{{ board.attachment.originalFileName }}</el-button
         ></div
       >
-      <div class="btnWrap">
+      <div v-if="current_user.email === board.uploadedBy.email" class="btnWrap">
         <el-button @click="board_modify = true"> 수정 </el-button>
         <el-button @click="deleteBoard()"> 삭제 </el-button>
       </div>
@@ -39,6 +43,24 @@
         <p>내용</p>
         <el-input placeholder="content" v-model="board.content" clearable>
         </el-input>
+      </div>
+      <div class="inputWrap">
+        <p>첨부 파일</p>
+        <el-upload
+          :on-change="uploadFile"
+          class="upload-demo"
+          name="attachment"
+          action="#"
+          :on-exceed="handleExceed"
+          :auto-upload="false"
+        >
+          <el-button slot="trigger" size="small" type="primary"
+            >select file</el-button
+          >
+          <div class="el-upload__tip" slot="tip"
+            >jpg/png files with a size less than 500kb</div
+          >
+        </el-upload>
       </div>
       <div class="btnWrap">
         <el-button @click="updateBoard()">저장</el-button>
@@ -64,6 +86,7 @@ export default {
       board_modify: false,
       visible: false,
       replay_visible: false,
+      file: null,
     }
   },
   computed: {
@@ -109,13 +132,36 @@ export default {
         })
     },
     async updateBoard() {
-      await updateBoard(this.board)
+      const formData = new FormData()
+      formData.append('_id', this.board._id)
+      formData.append('title', this.board.title)
+      formData.append('content', this.board.content)
+      formData.append('email', this.board.uploadedBy.email)
+      if (this.file) {
+        formData.append('attachment', this.file.raw, this.file.name)
+      }
+      if (this.board.attachment) {
+        formData.append('attachment_id', this.board.attachment._id)
+      }
+      await updateBoard(formData)
+
       this.board_modify = false
+      this.fecthBoard()
     },
     async fileDownload() {
       window.open(
         `http://localhost:3000/api/file/${this.board.attachment.serverFileName}/${this.board.attachment.originalFileName}`
       )
+    },
+    uploadFile(file) {
+      this.file = file
+    },
+    handleExceed() {
+      this.$message.warning({
+        type: 'warning',
+        message: '첨부파일은 1개만 가능합니다.',
+        showClose: 'true',
+      })
     },
   },
   mounted() {
@@ -123,3 +169,11 @@ export default {
   },
 }
 </script>
+<style lang="scss">
+.listWrap {
+  display: flex;
+}
+.attachmentWrap {
+  margin-bottom: 10px;
+}
+</style>

@@ -1,11 +1,16 @@
 import request from '@/utils/request'
+import requestFormTest from '@/utils/requestFormTest'
 
-export function insertBoard(data, formData) {
-  return request.post('/board/write', data, formData)
+export function insertBoard(data) {
+  return requestFormTest.post('/board/write', data)
 }
 
-export function getAllBoard() {
-  return request.get('/board/boards')
+export function getAllBoard(params) {
+  return request({
+    url: '/board/boards',
+    method: 'get',
+    params,
+  })
 }
 
 export function getBoard(id) {
@@ -17,5 +22,5 @@ export function deleteBoard(data) {
 }
 
 export function updateBoard(data) {
-  return request.patch('/board/update', data)
+  return requestFormTest.post('/board/update', data)
 }

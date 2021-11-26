@@ -10,12 +10,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async (config) => {
-    config.headers['Content-Type'] = 'application/json'
-
-    // if (config.data === 'FormData {}') {
-    //   config.headers['Content-Type'] = 'multipart/form-data'
-    // }
-    // config.headers['Content-Type'] = 'multipart/form-data'
+    console.log(config)
+    config.headers['Content-Type'] = 'multipart/form-data'
 
     const accessToken = getToken()
 

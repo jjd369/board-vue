@@ -1,7 +1,8 @@
 import request from '@/utils/request'
+import requestFormTest from '@/utils/requestFormTest'
 
 export function signUp(data) {
-  return request.post('/auth/signUp', data)
+  return requestFormTest.post('/auth/signUp', data)
 }
 
 export function signIn(data) {

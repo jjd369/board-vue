@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>게시물물</h1>
+    <h1 class="cardTitle">게시물</h1>
     <div class="listWrap">
       <el-table
         ref="multipleTable"
@@ -11,7 +11,7 @@
         @select="hadelSelectionCheck"
       >
         <el-table-column prop="uploadedBy.name" label="name"></el-table-column>
-        <el-table-column prop="title" label="title"> </el-table-column>
+        <el-table-column prop="title" label="title"></el-table-column>
         <el-table-column label="file">
           <template slot-scope="scope">
             <div v-if="!!scope.row.attachment">
@@ -24,6 +24,7 @@
         </el-table-column>
       </el-table>
     </div>
+    <PageWrap :totalPage="totalPage"></PageWrap>
     <div class="btnWrap">
       <el-button @click="$router.push({ name: 'write' })"> 글쓰기 </el-button>
     </div>
@@ -33,25 +34,41 @@
 <script>
 import { mapState } from 'vuex'
 import { getAllBoard, insertBoard } from '@/apis/board'
-
+import PageWrap from '@/components/pageNavi'
 export default {
+  components: {
+    PageWrap,
+  },
   data() {
     return {
       content: '',
       title: '',
       lists: [],
+      totalPage: 0,
       multipleSelection: [],
     }
   },
   computed: {
     ...mapState('auth', ['current_user']),
+    c_page() {
+      return this.$route.query.page
+    },
+  },
+  watch: {
+    c_page() {
+      this.fetchAllBoard()
+    },
   },
   methods: {
     async fetchAllBoard() {
       this.$store.dispatch('common/getLoading', true)
 
-      const { data } = await getAllBoard()
-      this.lists = data
+      const { data } = await getAllBoard({
+        page: this.c_page,
+        listNum: 3,
+      })
+      this.lists = data.lists
+      this.totalPage = data.totalPage
       this.$store.dispatch('common/getLoading', false)
     },
     async writeBoard() {

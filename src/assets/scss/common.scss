@@ -1,3 +1,9 @@
+a{
+  text-decoration: none;
+}
+.cardTitle {
+  margin-bottom: 15px;
+}
 .inputWrap {
   text-align: left;
   margin-bottom: 20px;
@@ -7,6 +13,9 @@
 }
 .titleWrap {
   font-size: $font-medium;
+  margin-bottom: 20px;
+}
+.contentWrap {
   margin-bottom: 20px;
 }
 .parWrap {
@@ -20,11 +29,26 @@
   padding: 10px;
 }
 .imgWrap {
-  width:40px;
-  height: 40px;
+  width:25px;
+  height: 25px;
   border-radius: 100%;
   overflow: hidden;
+  font-size: 25px;
   img{
     width: 100%;
+    transform: scale(1.5);
   }
+}
+
+// vue fade slide
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0s ease;
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateY(-10px);
+  opacity: 0;
 }

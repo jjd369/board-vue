@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1 class="cardTitle">글쓰기</h1>
     <form>
       <div class="inputWrap">
         <p>제목</p>
@@ -12,10 +13,12 @@
       <div class="inputWrap">
         <p>첨부 파일</p>
         <el-upload
+          :limit="1"
           :on-change="uploadFile"
           class="upload-demo"
           name="attachment"
           action="#"
+          :on-exceed="handleExceed"
           :auto-upload="false"
         >
           <el-button slot="trigger" size="small" type="primary"
@@ -43,7 +46,6 @@ export default {
     return {
       title: '',
       content: '',
-      fileList: [],
       file: null,
     }
   },
@@ -52,6 +54,7 @@ export default {
   },
   methods: {
     async writeBoard() {
+      this.$store.dispatch('common/getLoading', true)
       const formData = new FormData()
       // body에 넣을 formData 설정
       if (this.file) {
@@ -62,12 +65,35 @@ export default {
       formData.append('title', this.title)
       formData.append('content', this.content)
 
-      await insertBoard(formData)
-
-      this.$router.push({ name: 'boardList' })
+      insertBoard(formData)
+        .then(() => {
+          this.$message({
+            showClose: true,
+            message: '글 작성 완료.',
+            tpye: 'success',
+          })
+          this.$router.push({ name: 'boardList', query: { page: 1 } })
+        })
+        .catch((err) => {
+          this.$message({
+            showClose: true,
+            message: err.response.data.errors.message,
+            tpye: 'error',
+          })
+        })
+        .finally(() => {
+          this.$store.dispatch('common/getLoading', false)
+        })
     },
     uploadFile(file) {
       this.file = file
+    },
+    handleExceed() {
+      this.$message.warning({
+        type: 'warning',
+        message: '첨부파일은 1개만 가능합니다.',
+        showClose: 'true',
+      })
     },
   },
 }

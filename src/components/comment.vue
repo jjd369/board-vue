@@ -7,7 +7,6 @@
         placeholder="댓글을 입력해주세요."
         v-model="comment_to_board_string"
       >
-        <template slot="prepend">{{ current_user.name }}</template>
         <el-button
           slot="append"
           icon="el-icon-chat-line-round"
@@ -118,14 +117,13 @@
               placeholder="댓글을 입력해주세요."
               v-model="comment_to_comment_string"
             >
-              <template slot="prepend">{{ current_user.name }}</template>
               <el-button
                 slot="append"
                 icon="el-icon-chat-line-round"
                 @click="writeCommentToComment(comment._id)"
               ></el-button>
             </el-input>
-            <el-button @click="handleReply(comment_index)"> 취소 </el-button>
+            <!-- <el-button @click="handleReply(comment_index)"> 취소 </el-button> -->
           </div>
           <div class="box" v-if="comment.comments.length">
             <el-button
@@ -153,8 +151,13 @@
                     <!-- 대댓글 작성자 아이디 -->
                     <div class="col">
                       <div class="imgWrap">
+                        <i
+                          v-if="!nested_comment.uploadedBy.image"
+                          class="el-icon-user"
+                        ></i>
                         <img
-                          :src="`http://localhost:3000/images/${comment.uploadedBy.image}`"
+                          v-else
+                          :src="`http://localhost:3000/images/${nested_comment.uploadedBy.image}`"
                           alt="프로필사진"
                         />
                       </div>
@@ -406,6 +409,7 @@ export default {
     .col {
       &:nth-child(1) {
         align-items: flex-start;
+        margin-right: 10px;
       }
       &:nth-child(2) {
         flex-direction: column;
@@ -428,7 +432,7 @@ export default {
     .content {
       min-width: 150px;
       text-align: left;
-      width: 70%;
+      flex: 1;
       word-break: keep-all;
       word-wrap: break-word;
       text-indent: 15px;
@@ -448,17 +452,5 @@ export default {
       cursor: pointer;
     }
   }
-}
-
-.slide-fade-enter-active {
-  transition: all 0.3s ease;
-}
-.slide-fade-leave-active {
-  transition: all 0s ease;
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateY(-10px);
-  opacity: 0;
 }
 </style>

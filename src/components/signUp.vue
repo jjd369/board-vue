@@ -8,11 +8,7 @@
         </div>
         <div class="inputWrap">
           <p>이름</p>
-          <el-input
-            placeholder="아이디를입력해주세요."
-            v-model="name"
-            clearable
-          >
+          <el-input placeholder="이름을 입력해주세요." v-model="name" clearable>
           </el-input>
         </div>
         <div class="inputWrap">
@@ -84,7 +80,7 @@ export default {
   methods: {
     signUp() {
       this.$store.dispatch('common/getLoading', true)
-      const formData = new FormData()
+      let formData = new FormData()
       // body에 넣을 formData 설정
       if (this.file) {
         formData.append('attachment', this.file.raw, this.file.name)
@@ -92,11 +88,7 @@ export default {
       formData.append('name', this.name)
       formData.append('email', this.email)
       formData.append('password', this.password)
-      // signUp({
-      //   name: this.name,
-      //   email: this.email,
-      //   password: this.password,
-      // })
+
       signUp(formData)
         .then(({ data }) => {
           this.$message({

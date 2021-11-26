@@ -15,34 +15,35 @@ const routes = [
       {
         path: '/signUp',
         name: 'signUp',
-        component: () =>
-          import(/* webpackChunkName: "about" */ '@/components/signUp.vue'),
+        component: () => import('@/components/signUp.vue'),
       },
       {
         path: '/login',
         name: 'login',
-        component: () =>
-          import(/* webpackChunkName: "about" */ '@/components/login.vue'),
+        component: () => import('@/components/login.vue'),
       },
       {
         path: '/boardList',
         name: 'boardList',
-        component: () =>
-          import(/* webpackChunkName: "about" */ '@/components/boardList.vue'),
+        component: () => import('@/components/boardList.vue'),
         meta: { requiresAuth: true },
       },
       {
         path: '/board/:id',
         name: 'board',
-        component: () =>
-          import(/* webpackChunkName: "about" */ '@/components/board.vue'),
+        component: () => import('@/components/board.vue'),
         meta: { requiresAuth: true },
       },
       {
         path: '/write',
         name: 'write',
-        component: () =>
-          import(/* webpackChunkName: "about" */ '@/components/writeBoard.vue'),
+        component: () => import('@/components/writeBoard.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/myPage',
+        name: 'myPage',
+        component: () => import('@/components/myPage.vue'),
         meta: { requiresAuth: true },
       },
     ],

@@ -6,11 +6,16 @@ import { Message } from 'element-ui'
 import router from '@/router'
 
 export const state = {
-  current_user: null,
+  current_user: {
+    name: '',
+    image: '',
+    email: '',
+  },
+  logged_in: false,
 }
 
 export const getters = {
-  logged_in: (state) => (!state.current_user ? false : true),
+  logged_in: (state) => (!state.current_user.email ? false : true),
 }
 
 export const mutations = {
@@ -37,7 +42,9 @@ export const actions = {
         VueCookies.set('accessToken', data.accessToken)
         commit('SET_CURRENT_USER', {
           name: data.name,
-          email: userInfo.email,
+          email: data.email,
+          createdAt: data.createdAt,
+          image: data.image,
         })
         Message({
           showClose: true,
@@ -61,6 +68,6 @@ export const actions = {
     VueCookies.remove('refreshToken')
     VueCookies.remove('accessToken')
     await signOut({ refreshToken: getRefreshToken() })
-    commit('SET_CURRENT_USER', null)
+    commit('SET_CURRENT_USER', { name: '', image: '', email: '' })
   },
 }
