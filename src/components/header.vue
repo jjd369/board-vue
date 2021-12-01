@@ -30,10 +30,7 @@
                 <div slot="header" class="clearfix" style="display: flex">
                   <span class="imgWrap">
                     <i v-if="!current_user.image" class="el-icon-user"></i>
-                    <img
-                      v-else
-                      :src="`http://localhost:3000/images/${current_user.image}`"
-                      alt="프로필사진"
+                    <img v-else :src="current_user.image" alt="프로필사진"
                   /></span>
                   <el-button style="float: right; padding: 3px 0" type="text"
                     >{{ current_user.email }} /
