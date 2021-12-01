@@ -25,8 +25,5 @@ export default {
   computed: {
     ...mapState('common', ['loading']),
   },
-  mounted() {
-    console.log(this.$route)
-  },
 }
 </script>

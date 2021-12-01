@@ -23,11 +23,7 @@
           <span v-if="logged_in" class="userWrap">
             <div class="imgWrap" style="cursor: pointer" @click="handleCard">
               <i v-if="!current_user.image" class="el-icon-user"></i>
-              <img
-                v-else
-                :src="`http://localhost:3000/images/${current_user.image}`"
-                alt="프로필사진"
-              />
+              <img v-else :src="current_user.image" alt="프로필사진" />
             </div>
             <transition name="slide-fade">
               <el-card v-if="userCardHandle" class="user-card">

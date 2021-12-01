@@ -39,6 +39,10 @@ a{
     transform: scale(1.5);
   }
 }
+// input file display: none;
+#userImage {
+  display: none;
+}
 
 // vue fade slide
 .slide-fade-enter-active {

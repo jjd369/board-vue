@@ -6,6 +6,28 @@
         <div class="titleWrap">
           <h2>회원가입</h2>
         </div>
+        <div class="profileImg">
+          <div class="imgWrap">
+            <i v-if="!c_user_image_url" class="el-icon-user"></i>
+            <img v-else :src="c_user_image_url" alt="프로필사진" />
+          </div>
+          <div class="btnWrap">
+            <el-button
+              native-type="button"
+              round
+              icon="el-icon-edit"
+              size="mini"
+              @click="handleFileUpload"
+            ></el-button>
+            <input
+              type="file"
+              id="userImage"
+              ref="file"
+              @change="previewImage"
+              accept=".jpg, .jpeg, .png"
+            />
+          </div>
+        </div>
         <div class="inputWrap">
           <p>이름</p>
           <el-input placeholder="이름을 입력해주세요." v-model="name" clearable>
@@ -25,23 +47,6 @@
             v-model="password"
             show-password
           ></el-input>
-        </div>
-        <div class="inputWrap">
-          <p>첨부 파일</p>
-          <el-upload
-            action="#"
-            :on-change="uploadFile"
-            class="upload-demo"
-            name="attachment"
-            :auto-upload="false"
-          >
-            <el-button slot="trigger" size="small" type="primary"
-              >select file</el-button
-            >
-            <div class="el-upload__tip" slot="tip"
-              >jpg/png files with a size less than 500kb</div
-            >
-          </el-upload>
         </div>
         <div class="btnWarp">
           <el-button @click="signUp()">등록</el-button>
@@ -73,17 +78,23 @@ export default {
       name: '',
       password: '',
       email: '',
-      file: null,
       result: false,
+      userImageUrl: '',
+      file: null,
     }
+  },
+  computed: {
+    c_user_image_url() {
+      if (!this.file) return ''
+      return URL.createObjectURL(this.file)
+    },
   },
   methods: {
     signUp() {
       this.$store.dispatch('common/getLoading', true)
-      let formData = new FormData()
-      // body에 넣을 formData 설정
+      const formData = new FormData()
       if (this.file) {
-        formData.append('attachment', this.file.raw, this.file.name)
+        formData.append('attachment', this.file)
       }
       formData.append('name', this.name)
       formData.append('email', this.email)
@@ -112,6 +123,32 @@ export default {
     uploadFile(file) {
       this.file = file
     },
+    handleFileUpload() {
+      this.$refs.file.click()
+    },
+    previewImage(e) {
+      this.file = e.target.files[0]
+    },
   },
 }
 </script>
+
+<style lang="scss">
+.profileImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  .imgWrap {
+    width: 100px;
+    height: 100px;
+    font-size: 100px;
+    margin-bottom: 10px;
+  }
+  .editBtn {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+  }
+}
+</style>

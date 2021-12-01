@@ -65,7 +65,7 @@ export default {
 
       const { data } = await getAllBoard({
         page: this.c_page,
-        listNum: 3,
+        listNum: 4,
       })
       this.lists = data.lists
       this.totalPage = data.totalPage

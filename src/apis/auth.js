@@ -2,6 +2,7 @@ import request from '@/utils/request'
 import requestFormTest from '@/utils/requestFormTest'
 
 export function signUp(data) {
+  console.log(data)
   return requestFormTest.post('/auth/signUp', data)
 }
 

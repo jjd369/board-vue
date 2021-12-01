@@ -8,22 +8,14 @@
           <!-- 기존 프로필 없을 때 -->
           <i v-if="!current_user.image" class="el-icon-user"></i>
           <!-- 기존 프로필 있을 때 -->
-          <img
-            v-else
-            :src="`http://localhost:3000/images/${current_user.image}`"
-            alt="프로필사진"
-          />
+          <img v-else :src="current_user.image" alt="프로필사진" />
         </div>
         <!-- 프로필 수정 할 때 -->
         <div v-else class="imgWrap">
           <!-- 프로필 사진 업로드 안 할 때 -->
           <template v-if="!c_user_image_url">
             <i v-if="!current_user.image" class="el-icon-user"></i>
-            <img
-              v-else
-              :src="`http://localhost:3000/images/${current_user.image}`"
-              alt="프로필사진"
-            />
+            <img v-else :src="current_user.image" alt="프로필사진" />
           </template>
           <!-- 프로필 사진 업로드 할 때 -->
           <template v-else>
@@ -76,7 +68,6 @@ export default {
       name: '',
       email: '',
       userImageUrl: '',
-      file: null,
     }
   },
   computed: {
@@ -104,7 +95,6 @@ export default {
       this.$refs.file.click()
     },
     previewImage() {
-      console.log(this.$refs.file.files[0])
       this.userImageUrl = URL.createObjectURL(this.$refs.file.files[0])
     },
     async callUpdateUser() {
@@ -134,9 +124,9 @@ export default {
   flex-direction: column;
   margin-bottom: 25px;
   .imgWrap {
-    width: 50px;
-    height: 50px;
-    font-size: 50px;
+    width: 100px;
+    height: 100px;
+    font-size: 100px;
     margin-bottom: 10px;
   }
   .editBtn {
@@ -147,8 +137,5 @@ export default {
 }
 .list {
   margin-bottom: 15px;
-}
-#userImage {
-  display: none;
 }
 </style>
