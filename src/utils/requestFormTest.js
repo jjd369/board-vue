@@ -5,7 +5,7 @@ import VueCookies from 'vue-cookies'
 
 const instance = axios.create({
   baseURL: '/api',
-  timeout: 3000,
+  timeout: 10000,
 })
 
 instance.interceptors.request.use(
