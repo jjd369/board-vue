@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="myPageWrap">
     <h1 class="cardTitle">마이 페이지</h1>
     <template>
       <div slot="header" class="header">
@@ -117,25 +117,27 @@ export default {
 </script>
 
 <style lang="scss">
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-bottom: 25px;
-  .imgWrap {
-    width: 100px;
-    height: 100px;
-    font-size: 100px;
-    margin-bottom: 10px;
+.myPageWrap {
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 25px;
+    .imgWrap {
+      width: 100px;
+      height: 100px;
+      font-size: 100px;
+      margin-bottom: 10px;
+    }
+    .editBtn {
+      width: 15px;
+      height: 15px;
+      font-size: 15px;
+    }
   }
-  .editBtn {
-    width: 15px;
-    height: 15px;
-    font-size: 15px;
+  .list {
+    margin-bottom: 15px;
   }
-}
-.list {
-  margin-bottom: 15px;
 }
 </style>

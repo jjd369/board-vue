@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-row type="flex" class="row-bg" justify="space-around">
+  <div class="header">
+    <el-row type="flex" class="row-bg" justify="space-around" align="middle">
       <el-col :span="6"
         ><div class="logoBox"
           ><router-link :to="{ name: 'layout' }">jjd</router-link></div
@@ -115,5 +115,6 @@ export default {
   top: 35px;
   right: 0px;
   z-index: 100;
+  line-height: 20px;
 }
 </style>

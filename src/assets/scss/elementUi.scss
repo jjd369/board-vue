@@ -1,8 +1,11 @@
 .el-header, .el-footer {
-  background-color: #B3C0D1;
-  color: #333;
+  background-color: #505d6e;
+  color: #f8f8f8;
   text-align: center;
-  padding: 20px;
+  line-height: 60px;
+  a {
+    color: #f8f8f8;
+  }
 }
 .el-main {
   background-color: #E9EEF3;
