@@ -61,19 +61,21 @@
 <script>
 import { updateUser } from '@/apis/users'
 import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
       modify: false,
       name: '',
       email: '',
-      userImageUrl: '',
+      file: null,
     }
   },
   computed: {
     ...mapState('auth', ['current_user']),
     c_user_image_url() {
-      return this.userImageUrl
+      if (!this.file) return ''
+      return URL.createObjectURL(this.file)
     },
   },
   methods: {
@@ -94,16 +96,16 @@ export default {
     handleFileUpload() {
       this.$refs.file.click()
     },
-    previewImage() {
-      this.userImageUrl = URL.createObjectURL(this.$refs.file.files[0])
+    previewImage(e) {
+      this.file = e.target.files[0]
     },
     async callUpdateUser() {
       this.$store.dispatch('common/getLoading', true)
 
       const formData = new FormData()
       // body에 넣을 formData 설정
-      if (this.userImageUrl) {
-        formData.append('attachment', this.$refs.file.files[0])
+      if (this.file) {
+        formData.append('userImage', this.file)
       }
       formData.append('name', this.current_user.name)
 

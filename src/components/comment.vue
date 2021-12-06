@@ -25,11 +25,7 @@
         <div class="col">
           <div class="imgWrap">
             <i v-if="!comment.uploadedBy.image" class="el-icon-user"></i>
-            <img
-              v-else
-              :src="`http://localhost:3000/images/${comment.uploadedBy.image}`"
-              alt="프로필사진"
-            />
+            <img v-else :src="comment.uploadedBy.image" alt="프로필사진" />
           </div>
         </div>
         <!-- 댓글 내용 -->
@@ -157,7 +153,7 @@
                         ></i>
                         <img
                           v-else
-                          :src="`http://localhost:3000/images/${nested_comment.uploadedBy.image}`"
+                          :src="nested_comment.uploadedBy.image"
                           alt="프로필사진"
                         />
                       </div>

@@ -3,7 +3,7 @@
     <template v-if="!board_modify">
       <div class="listWrap">
         <el-button
-          @click="$router.push({ name: 'boardList' })"
+          @click="$router.push({ name: 'boardList', query: { page: 1 } })"
           icon="el-icon-s-fold"
           size="mini"
         >
@@ -18,11 +18,13 @@
       >
       <div v-if="!!board.attachment" class="attachmentWrap"
         ><el-button
+          v-for="file in board.attachment"
+          :key="file._id"
           type="text"
           size="mini"
           icon="el-icon-folder"
-          @click="fileDownload()"
-          >{{ board.attachment.originalFileName }}</el-button
+          @click="fileDownload(file.serverFileName)"
+          >{{ file.originalFileName }}</el-button
         ></div
       >
       <div v-if="current_user.email === board.uploadedBy.email" class="btnWrap">
@@ -63,6 +65,7 @@
         </el-upload>
       </div>
       <div class="btnWrap">
+        <el-button @click="cancelModify()">취소</el-button>
         <el-button @click="updateBoard()">저장</el-button>
       </div>
     </template>
@@ -81,6 +84,9 @@ export default {
     return {
       board: {
         attachment: {},
+        uploadedBy: {
+          email: '',
+        },
       },
       comments: [],
       board_modify: false,
@@ -121,7 +127,7 @@ export default {
             message: '글이 삭제되었습니다.',
             tpye: 'success',
           })
-          this.$router.push({ name: 'boardList' })
+          this.$router.push({ name: 'boardList', query: { page: 1 } })
         })
         .catch((err) => {
           this.$message({
@@ -148,10 +154,9 @@ export default {
       this.board_modify = false
       this.fecthBoard()
     },
-    async fileDownload() {
-      window.open(
-        `http://localhost:3000/api/file/${this.board.attachment.serverFileName}/${this.board.attachment.originalFileName}`
-      )
+    async fileDownload(key) {
+      // await downloadFile({ key })
+      window.open(`http://localhost:3000/api/file/${key}`)
     },
     uploadFile(file) {
       this.file = file
@@ -162,6 +167,10 @@ export default {
         message: '첨부파일은 1개만 가능합니다.',
         showClose: 'true',
       })
+    },
+    cancelModify() {
+      this.board_modify = false
+      this.fecthBoard()
     },
   },
   mounted() {

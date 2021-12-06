@@ -6,28 +6,6 @@
         <div class="titleWrap">
           <h2>회원가입</h2>
         </div>
-        <div class="profileImg">
-          <div class="imgWrap">
-            <i v-if="!c_user_image_url" class="el-icon-user"></i>
-            <img v-else :src="c_user_image_url" alt="프로필사진" />
-          </div>
-          <div class="btnWrap">
-            <el-button
-              native-type="button"
-              round
-              icon="el-icon-edit"
-              size="mini"
-              @click="handleFileUpload"
-            ></el-button>
-            <input
-              type="file"
-              id="userImage"
-              ref="file"
-              @change="previewImage"
-              accept=".jpg, .jpeg, .png"
-            />
-          </div>
-        </div>
         <div class="inputWrap">
           <p>이름</p>
           <el-input placeholder="이름을 입력해주세요." v-model="name" clearable>
@@ -71,6 +49,7 @@
 </template>
 <script>
 import { signUp } from '@/apis/auth'
+import { sendMail } from '@/apis/mail'
 
 export default {
   data() {
@@ -79,29 +58,22 @@ export default {
       password: '',
       email: '',
       result: false,
-      userImageUrl: '',
-      file: null,
     }
-  },
-  computed: {
-    c_user_image_url() {
-      if (!this.file) return ''
-      return URL.createObjectURL(this.file)
-    },
   },
   methods: {
     signUp() {
       this.$store.dispatch('common/getLoading', true)
-      const formData = new FormData()
-      if (this.file) {
-        formData.append('attachment', this.file)
-      }
-      formData.append('name', this.name)
-      formData.append('email', this.email)
-      formData.append('password', this.password)
 
-      signUp(formData)
-        .then(({ data }) => {
+      signUp({
+        name: this.name,
+        email: this.email,
+        password: this.password,
+      })
+        .then(async ({ data }) => {
+          await sendMail({
+            name: this.name,
+            email: this.email,
+          })
           this.$message({
             showClose: true,
             message: `${data.name}님 회원가입이 완료되었습니다.`,
@@ -119,15 +91,6 @@ export default {
         .finally(() => {
           this.$store.dispatch('common/getLoading', false)
         })
-    },
-    uploadFile(file) {
-      this.file = file
-    },
-    handleFileUpload() {
-      this.$refs.file.click()
-    },
-    previewImage(e) {
-      this.file = e.target.files[0]
     },
   },
 }

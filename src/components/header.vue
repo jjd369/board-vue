@@ -12,7 +12,9 @@
             <router-link :to="{ name: 'write' }">글쓰기</router-link></span
           >
           <span>
-            <router-link :to="{ name: 'boardList' }">게시판</router-link></span
+            <router-link :to="{ name: 'boardList', query: { page: 1 } }"
+              >게시판</router-link
+            ></span
           >
           <span v-if="!logged_in"
             ><router-link :to="{ name: 'login' }">로그인</router-link></span
@@ -64,7 +66,7 @@ export default {
   methods: {
     moveMyPage() {
       this.userCardHandle = false
-      this.$router.push({ name: 'myPage' })
+      this.$router.push({ name: 'myPage' }).catch(() => {})
     },
     async logout() {
       this.userCardHandle = false
@@ -112,7 +114,7 @@ export default {
 }
 .user-card {
   position: absolute;
-  top: 35px;
+  top: 45px;
   right: 0px;
   z-index: 100;
   line-height: 20px;
