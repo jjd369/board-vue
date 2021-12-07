@@ -51,7 +51,7 @@
         <el-button @click="modify = true"> 수정</el-button>
       </div>
       <div v-else class="btnWarp">
-        <el-button @click="modify = false">취소</el-button>
+        <el-button @click="cancelModfy()">취소</el-button>
         <el-button @click="callUpdateUser()">저장</el-button>
       </div>
     </template>
@@ -86,13 +86,6 @@ export default {
       const day = createDate.getDay()
       return `${year}년 ${month}월 ${day}일`
     },
-    handleExceed() {
-      this.$message.warning({
-        type: 'warning',
-        message: '첨부파일은 1개만 가능합니다.',
-        showClose: 'true',
-      })
-    },
     handleFileUpload() {
       this.$refs.file.click()
     },
@@ -113,6 +106,10 @@ export default {
       this.$store.dispatch('auth/init')
       this.modify = false
       this.$store.dispatch('common/getLoading', false)
+    },
+    cancelModfy() {
+      this.modify = false
+      this.file = null
     },
   },
 }

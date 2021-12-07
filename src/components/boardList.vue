@@ -2,27 +2,29 @@
   <div>
     <h1 class="cardTitle">게시물</h1>
     <div class="listWrap">
-      <el-table
-        ref="multipleTable"
-        :data="lists"
-        style="width: 100%"
-        height="250"
-        @current-change="handleSelectionChange"
-        @select="hadelSelectionCheck"
+      <div class="listheader"
+        ><span class="author">author</span>
+        <span class="title">title</span>
+        <span class="attachment">file</span>
+        <span class="date">date</span>
+        <span class="view">views</span></div
       >
-        <el-table-column prop="uploadedBy.name" label="name"></el-table-column>
-        <el-table-column prop="title" label="title"></el-table-column>
-        <el-table-column label="file">
-          <template slot-scope="scope">
-            <div v-if="!!scope.row.attachment">
-              <i class="el-icon-folder"></i>
-              <span style="margin-left: 10px">{{
-                scope.row.attachment.originalFileName
-              }}</span>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
+      <ul class="listBody">
+        <li
+          class="listContent"
+          v-for="(list, index) in this.lists"
+          :key="index"
+          @click="handleSelectionChange(list)"
+        >
+          <span class="author">{{ list.uploadedBy.name }}</span>
+          <span class="title">{{ list.title }}</span>
+          <span class="attachment"
+            ><i v-if="list.attachment.length" class="el-icon-folder"></i
+          ></span>
+          <span class="date">{{ calculateDate(list.createdAt) }}</span>
+          <span class="view">{{ list.view }}</span>
+        </li>
+      </ul>
     </div>
     <PageWrap :totalPage="totalPage"></PageWrap>
     <div class="btnWrap">
@@ -45,7 +47,6 @@ export default {
       title: '',
       lists: [],
       totalPage: 0,
-      multipleSelection: [],
     }
   },
   computed: {
@@ -81,9 +82,13 @@ export default {
     handleSelectionChange(val) {
       this.$router.push({ name: 'board', params: { id: val._id } })
     },
-    hadelSelectionCheck(val) {
-      console.log(val)
-      this.multipleSelection = val
+    calculateDate(date) {
+      console.log(date)
+      const createDate = new Date(date)
+      const year = createDate.getFullYear()
+      const month = createDate.getMonth()
+      const day = createDate.getDay()
+      return `${year}-${month}-${day}`
     },
   },
   mounted() {
@@ -92,4 +97,31 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.listheader,
+.listContent {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  span {
+    padding: 10px 0;
+  }
+  .author {
+    min-width: 90px;
+  }
+  .title {
+    min-width: 220px;
+  }
+  .attachment {
+    min-width: 40px;
+  }
+  .date {
+    min-width: 100px;
+  }
+  .view {
+    min-width: 40px;
+  }
+}
+.listContent {
+  cursor: pointer;
+}
+</style>

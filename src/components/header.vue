@@ -59,6 +59,11 @@ export default {
       userCardHandle: false,
     }
   },
+  watch: {
+    $route() {
+      this.userCardHandle = false
+    },
+  },
   computed: {
     ...mapState('auth', ['current_user']),
     ...mapGetters('auth', ['logged_in']),
