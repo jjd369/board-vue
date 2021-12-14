@@ -51,8 +51,8 @@
         <el-button size="mini" @click="modify = true"> 수정</el-button>
       </div>
       <div v-else class="btnWarp">
-        <el-button @click="cancelModfy()">취소</el-button>
-        <el-button @click="callUpdateUser()">저장</el-button>
+        <el-button size="mini" @click="cancelModfy()">취소</el-button>
+        <el-button size="mini" @click="callUpdateUser()">저장</el-button>
       </div>
       <div class="myBoardWrap">
         <h1 class="cardTitle">나의 게시글</h1>
