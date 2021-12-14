@@ -27,7 +27,7 @@
           ></el-input>
         </div>
         <div class="btnWarp">
-          <el-button @click="signUp()">등록</el-button>
+          <el-button size="mini" @click="signUp()">등록</el-button>
         </div>
       </div>
       <!-- 화원가입 완료 -->
@@ -38,7 +38,7 @@
           :subTitle="`${name}님 회원가입을 축하드립니다.`"
         >
           <template slot="extra">
-            <el-button @click="$router.push({ name: 'login' })"
+            <el-button size="mini" @click="$router.push({ name: 'login' })"
               >로그인</el-button
             >
           </template>

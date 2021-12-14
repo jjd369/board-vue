@@ -22,7 +22,7 @@
         ></el-input>
       </div>
       <div class="btnWrap">
-        <el-button @click="login()">로그인</el-button>
+        <el-button size="mini" @click="login()">로그인</el-button>
       </div>
     </form>
   </div>

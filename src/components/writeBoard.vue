@@ -12,22 +12,6 @@
       </div>
       <div class="inputWrap">
         <p>첨부 파일</p>
-        <!-- <el-upload
-          :limit="1"
-          :on-change="uploadFile"
-          class="upload-demo"
-          name="attachment"
-          action="#"
-          :on-exceed="handleExceed"
-          :auto-upload="false"
-        >
-          <el-button slot="trigger" size="small" type="primary"
-            >select file</el-button
-          >
-          <div class="el-upload__tip" slot="tip"
-            >jpg/png files with a size less than 500kb</div
-          >
-        </el-upload> -->
         <el-button
           native-type="button"
           round
@@ -57,11 +41,10 @@
         </transition>
       </div>
       <div>
-        <el-button
-          @click="$router.push({ name: 'boardList', query: { page: 1 } })"
+        <el-button size="mini" @click="$router.push({ name: 'boardList' })"
           >목록</el-button
         >
-        <el-button @click="writeBoard()">삽입</el-button>
+        <el-button size="mini" @click="writeBoard()">글쓰기</el-button>
       </div>
     </form>
   </div>
@@ -81,10 +64,6 @@ export default {
   },
   computed: {
     ...mapState('auth', ['current_user']),
-    // c_file_name() {
-    //   if (!this.file) return ''
-    //   return this.fil
-    // },
   },
   methods: {
     async writeBoard() {
@@ -93,8 +72,8 @@ export default {
       // body에 넣을 formData 설정
       this.files.forEach((file) => {
         formData.append('attachment', file)
-        console.log(file)
       })
+
       formData.append('title', this.title)
       formData.append('content', this.content)
 
@@ -105,7 +84,7 @@ export default {
             message: '글 작성 완료.',
             tpye: 'success',
           })
-          this.$router.push({ name: 'boardList', query: { page: 1 } })
+          this.$router.push({ name: 'boardList' })
         })
         .catch((err) => {
           this.$message({
@@ -122,14 +101,17 @@ export default {
       this.$refs.file.click()
     },
     previewImage(e) {
-      if (e.target.files.length > 3) {
+      const filesMaxCount = 3
+      const filesCount = e.target.files.length + this.files.length
+      if (filesMaxCount < filesCount) {
         return this.$message({
           type: 'info',
           message: '첨부 파일 최대 개수는 3개 입니다.',
           showClose: true,
         })
       }
-      this.files = [...e.target.files]
+      this.files = [...this.files, ...e.target.files]
+      console.log(this.files[0].File)
     },
     deleteFileList(index) {
       this.files.splice(index, 1)
@@ -137,16 +119,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-.fileListWrap {
-  margin-top: 10px;
-  .fileList {
-    i {
-      margin-right: 5px;
-      cursor: pointer;
-    }
-    padding: 5px;
-  }
-}
-</style>

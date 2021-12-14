@@ -45,6 +45,57 @@ a{
   display: none;
 }
 
+.fileListWrap {
+  margin-top: 10px;
+  .fileList {
+    i {
+      margin-right: 5px;
+      cursor: pointer;
+    }
+    padding: 5px;
+  }
+}
+// board list
+.listheader,
+.listContent {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+
+  > span {
+    flex:1;
+    padding: 10px 0;
+  }
+  .author {
+    min-width: 90px;
+  }
+  .title {
+    min-width: 220px;
+  }
+  .attachment {
+    min-width: 40px;
+  }
+  .date {
+    min-width: 100px;
+  }
+  .view {
+    min-width: 40px;
+  }
+}
+.listBodyEmpty {
+  padding: 40px 0;
+}
+.searchWrap {
+  margin: 15px 0px;
+  .searchInput {
+    width: 400px;
+  }
+  .el-select .el-input {
+    width: 100px;
+  }
+}
+
+
 // vue fade slide
 .slide-fade-enter-active {
   transition: all 0.3s ease;

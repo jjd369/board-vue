@@ -12,11 +12,6 @@ instance.interceptors.request.use(
   async (config) => {
     config.headers['Content-Type'] = 'application/json'
 
-    // if (config.data === 'FormData {}') {
-    //   config.headers['Content-Type'] = 'multipart/form-data'
-    // }
-    // config.headers['Content-Type'] = 'multipart/form-data'
-
     const accessToken = getToken()
 
     if (hasToken()) {

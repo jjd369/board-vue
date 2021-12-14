@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     MovePage(num) {
-      this.$router.push({ name: '', query: { page: num } }).catch(() => {})
+      this.$emit('pageMove', num)
     },
   },
 }

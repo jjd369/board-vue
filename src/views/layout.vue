@@ -3,7 +3,7 @@
     <el-header><Header></Header></el-header>
     <el-main>
       <el-row type="flex" justify="center">
-        <el-col :sm="18" :md="15" :lg="15" :xl="12">
+        <el-col :sm="18" :md="15" :lg="12" :xl="12">
           <el-card>
             <home v-if="$route.fullPath === '/'"></home>
             <router-view></router-view>

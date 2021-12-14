@@ -17,6 +17,14 @@ export function getBoard(id) {
   return request.get(`/board/boards/${id}`)
 }
 
+export function getMyBoards(params) {
+  return request({
+    url: '/board/myBoards',
+    method: 'get',
+    params,
+  })
+}
+
 export function deleteBoard(data) {
   return request.delete('/board/delete', { data })
 }

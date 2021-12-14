@@ -51,7 +51,7 @@ export const actions = {
           message: `${data.name}님이 로그인 되었습니다.`,
           type: 'success',
         })
-        router.push({ name: 'boardList', query: { page: 1 } })
+        router.push({ name: 'boardList' })
       })
       .catch((err) => {
         Message({

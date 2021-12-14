@@ -12,9 +12,7 @@
             <router-link :to="{ name: 'write' }">글쓰기</router-link></span
           >
           <span>
-            <router-link :to="{ name: 'boardList', query: { page: 1 } }"
-              >게시판</router-link
-            ></span
+            <router-link :to="{ name: 'boardList' }">게시판</router-link></span
           >
           <span v-if="!logged_in"
             ><router-link :to="{ name: 'login' }">로그인</router-link></span

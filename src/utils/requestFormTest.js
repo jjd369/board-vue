@@ -5,12 +5,11 @@ import VueCookies from 'vue-cookies'
 
 const instance = axios.create({
   baseURL: '/api',
-  timeout: 10000,
+  timeout: 30000,
 })
 
 instance.interceptors.request.use(
   async (config) => {
-    console.log(config)
     config.headers['Content-Type'] = 'multipart/form-data'
 
     const accessToken = getToken()

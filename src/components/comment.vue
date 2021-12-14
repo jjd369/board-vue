@@ -3,11 +3,13 @@
     <!-- 댓글 입력 박스 -->
     <div class="commentWrite">
       <el-input
+        size="mini"
         maxlength="55"
         placeholder="댓글을 입력해주세요."
         v-model="comment_to_board_string"
       >
         <el-button
+          size="mini"
           slot="append"
           icon="el-icon-chat-line-round"
           @click="writeCommentToBoard"
@@ -52,19 +54,21 @@
                     style="text-align: right; margin: 0"
                   >
                     <el-button
+                      size="mini"
                       @click="
                         handleUpdateComment(comment_index, comment.content)
                       "
                       >수정</el-button
                     >
-                    <el-button @click="deleteComment(comment._id)"
+                    <el-button @click="deleteComment(comment._id)" size="mini"
                       >삭제</el-button
                     >
                   </div>
                   <div v-else style="text-align: right; margin: 0">
-                    <el-button>신고</el-button>
+                    <el-button size="mini">신고</el-button>
                   </div>
                   <el-button
+                    size="mini"
                     slot="reference"
                     type="text"
                     icon="el-icon-more"
@@ -82,13 +86,16 @@
               ></span>
               <span>
                 <el-button
+                  size="mini"
                   :disabled="!comment_modify_string.length ? true : false"
                   @click="updateComment(comment._id)"
                   >수정</el-button
                 ></span
               >
               <span>
-                <el-button @click="handleUpdateComment(comment_index)"
+                <el-button
+                  size="mini"
+                  @click="handleUpdateComment(comment_index)"
                   >취소</el-button
                 ></span
               >
@@ -194,6 +201,7 @@
                                 style="text-align: right; margin: 0"
                               >
                                 <el-button
+                                  size="mini"
                                   @click="
                                     handleUpdateNestedComment(
                                       comment_index,
@@ -204,14 +212,16 @@
                                   >수정</el-button
                                 >
                                 <el-button
+                                  size="mini"
                                   @click="deleteComment(nested_comment._id)"
                                   >삭제</el-button
                                 >
                               </div>
                               <div v-else style="text-align: right; margin: 0">
-                                <el-button>신고</el-button>
+                                <el-button size="mini">신고</el-button>
                               </div>
                               <el-button
+                                size="mini"
                                 slot="reference"
                                 type="text"
                                 icon="el-icon-more"
@@ -229,6 +239,7 @@
                           ></span>
                           <span>
                             <el-button
+                              size="mini"
                               :disabled="
                                 !nested_comment_modify_string.length
                                   ? true
