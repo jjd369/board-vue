@@ -16,8 +16,8 @@
   // min-width: 850px;
   transition: all ease 2s 0s;
 }
-.el-popper {
-  min-width: 70px;
+.el-popover {
+  min-width: initial;
 }
 @include mobile {
 }

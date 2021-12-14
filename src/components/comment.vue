@@ -43,9 +43,6 @@
               <span class="more">
                 <el-popover
                   placement="bottom"
-                  :width="
-                    comment.uploadedBy.email === current_user.email ? 150 : 70
-                  "
                   trigger="click"
                   visible-arrow="true"
                 >
@@ -80,6 +77,7 @@
             <template v-else>
               <span class="content"
                 ><el-input
+                  size="mini"
                   maxlength="55"
                   v-model="comment_modify_string"
                 ></el-input
@@ -116,11 +114,13 @@
           <!-- 대댓글 입력 창 -->
           <div class="box" v-if="comment.reply">
             <el-input
+              size="mini"
               maxlength="55"
               placeholder="댓글을 입력해주세요."
               v-model="comment_to_comment_string"
             >
               <el-button
+                size="mini"
                 slot="append"
                 icon="el-icon-chat-line-round"
                 @click="writeCommentToComment(comment._id)"
@@ -184,12 +184,6 @@
                           <span class="more">
                             <el-popover
                               placement="bottom"
-                              :width="
-                                nested_comment.uploadedBy.email ===
-                                current_user.email
-                                  ? 150
-                                  : 70
-                              "
                               trigger="click"
                               visible-arrow="true"
                             >
@@ -233,6 +227,7 @@
                         <template v-else>
                           <span class="content"
                             ><el-input
+                              size="mini"
                               maxlength="55"
                               v-model="nested_comment_modify_string"
                             ></el-input
@@ -251,6 +246,7 @@
                           >
                           <span>
                             <el-button
+                              size="mini"
                               @click="
                                 handleUpdateNestedComment(
                                   comment_index,
@@ -431,10 +427,12 @@ export default {
         flex-wrap: wrap;
         width: 100%;
         line-height: 30px;
+        font-size: 12px;
       }
     }
     .author {
       min-width: 80px;
+      text-align: left;
     }
     .content {
       min-width: 150px;
@@ -442,7 +440,6 @@ export default {
       flex: 1;
       word-break: keep-all;
       word-wrap: break-word;
-      text-indent: 15px;
     }
     .time {
       min-width: 50px;
