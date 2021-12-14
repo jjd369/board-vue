@@ -4,11 +4,18 @@
     <form>
       <div class="inputWrap">
         <p>제목</p>
-        <el-input placeholder="title" v-model="title" clearable> </el-input>
+        <el-input size="small" placeholder="title" v-model="title" clearable>
+        </el-input>
       </div>
       <div class="inputWrap">
         <p>내용</p>
-        <el-input placeholder="content" v-model="content" clearable> </el-input>
+        <el-input
+          size="small"
+          placeholder="content"
+          v-model="content"
+          clearable
+        >
+        </el-input>
       </div>
       <div class="inputWrap">
         <p>첨부 파일</p>

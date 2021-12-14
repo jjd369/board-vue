@@ -106,7 +106,8 @@ export default {
   }
 }
 .item {
-  margin-bottom: 18px;
+  font-size: 14px;
+  margin-bottom: 15px;
   &:last-child {
     margin-bottom: 0px;
   }

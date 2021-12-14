@@ -19,8 +19,14 @@
 .el-popover {
   min-width: initial;
 }
+
+.el-card__header {
+  padding: 10px;
+}
+.el-card__body {
+  padding: 10px;
+}
 @include mobile {
 }
 @include tablet {
-
 }

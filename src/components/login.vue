@@ -7,6 +7,7 @@
       <div class="inputWrap">
         <p>이메일</p>
         <el-input
+          size="small"
           placeholder="이메일을 입력해주세요."
           v-model="email"
           clearable
@@ -16,6 +17,7 @@
       <div class="inputWrap">
         <p>비밀번호</p>
         <el-input
+          size="small"
           placeholder="비밀번호를 입력해주세요."
           v-model="password"
           show-password
