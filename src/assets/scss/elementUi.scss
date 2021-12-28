@@ -26,6 +26,9 @@
 .el-card__body {
   padding: 15px;
 }
+.el-select-dropdown__item{
+  font-size: 12px;
+}
 @include mobile {
 }
 @include tablet {
