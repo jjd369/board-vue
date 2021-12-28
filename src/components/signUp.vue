@@ -56,7 +56,7 @@
 </template>
 <script>
 import { signUp } from '@/apis/auth'
-import { sendMail } from '@/apis/mail'
+// import { sendMail } from '@/apis/mail'
 
 export default {
   data() {
@@ -77,10 +77,10 @@ export default {
         password: this.password,
       })
         .then(async ({ data }) => {
-          await sendMail({
-            name: this.name,
-            email: this.email,
-          })
+          // await sendMail({
+          //   name: this.name,
+          //   email: this.email,
+          // })
           this.$message({
             showClose: true,
             message: `${data.name}님 회원가입이 완료되었습니다.`,
